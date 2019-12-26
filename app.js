@@ -2,18 +2,25 @@
 const express = require('express');
 const app = express();
 
-const router = express.Router();
-const goodsData = require('./mock/goods.json');
-const articlesData = require('./mock/articles.json');
+const goodsRouter = require('./router/goods.js');
+const articlesRouter = require('./router/articles.js');
 
-router.get('/goods', function(req, res, next){
-    res.json(goodsData);
-});
-router.get('/articles', function(req, res, next){
-    res.json(articlesData);
+// server/app.js
+/* 允许跨域访问*/
+app.all('*', function(req, res, next) {
+    // CORS配置
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
 });
 
-app.use(router);
+app.use(goodsRouter);
+app.use(articlesRouter);
+
+
 app.listen(3008, function(){
     console.log('接口服务已启动，访问3008');
 });
